@@ -1,0 +1,49 @@
+.todoWrap {
+  border: 1px solid orange;
+  border-radius: 25px;
+  padding: 30px;
+  background-color: #89a8ab;
+
+  min-width: 500px;
+}
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 23px;
+  color: #102323;
+  margin-bottom: 10px;
+}
+.add {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin-bottom: 20px;
+}
+.filterSort {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+
+  margin-bottom: 30px;
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+}
+.task{
+  font-size: 18px;
+  border-bottom: 1px solid #102323;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.date {
+  font-size: 13px;
+  color: #62676b;
+}
