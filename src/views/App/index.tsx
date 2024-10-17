@@ -5,11 +5,11 @@ import DatePicker from "antd/lib/date-picker";
 import PlusCircleOutlined from "@ant-design/icons/lib/icons/PlusCircleOutlined";
 import dayjs, { Dayjs } from "dayjs";
 
-import { ChangeEvent, useState } from "react";
-
 import { Filtered } from "../components/Filtered.tsx";
 import { Tasks } from "../components/Tasks.tsx";
 import { Sorted } from "../components/Sorted.tsx";
+
+import { ChangeEvent, useState } from "react";
 
 export type Status = "all" | "active" | "completed";
 export type Task = {
@@ -18,6 +18,7 @@ export type Task = {
   date: string;
   status: Status;
 };
+
 const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
 
 function App() {
@@ -71,6 +72,11 @@ function App() {
         <div className={s.add}>
           <Input style={{ maxWidth: "67%" }} placeholder="Basic usage" value={title} onChange={onChangeHandler} />
           <DatePicker onChange={onChangeDateHandler} defaultValue={dayjs()} format={"DD/MM/YYYY"} />
+          <DatePicker
+            onChange={onChangeDateHandler}
+            defaultValue={dayjs(dayjs(), dateFormatList[0])}
+            format={dateFormatList}
+          />
           <PlusCircleOutlined
             onClick={addTaskHandler}
             style={{ color: "green", fontSize: "30px", cursor: "pointer" }}
