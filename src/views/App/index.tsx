@@ -19,8 +19,6 @@ export type Task = {
   status: Status;
 };
 
-const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
-
 function App() {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
   const [selectedStatus, setSelectedStatus] = useState<Status>("all");
@@ -65,6 +63,11 @@ function App() {
     );
   };
 
+  const updateTaskTitle = (taskId: number, newTitle: string) => {
+    debugger;
+    setTask(task.map((el) => (el.id === taskId ? { ...el, title: newTitle } : el)));
+  };
+
   return (
     <>
       <main className={s.todoWrap}>
@@ -72,11 +75,6 @@ function App() {
         <div className={s.add}>
           <Input style={{ maxWidth: "67%" }} placeholder="Basic usage" value={title} onChange={onChangeHandler} />
           <DatePicker onChange={onChangeDateHandler} defaultValue={dayjs()} format={"DD/MM/YYYY"} />
-          <DatePicker
-            onChange={onChangeDateHandler}
-            defaultValue={dayjs(dayjs(), dateFormatList[0])}
-            format={dateFormatList}
-          />
           <PlusCircleOutlined
             onClick={addTaskHandler}
             style={{ color: "green", fontSize: "30px", cursor: "pointer" }}
@@ -91,6 +89,7 @@ function App() {
             filteredTasks={filteredTasks}
             removeTaskHandler={(taskId) => removeTaskHandler(taskId)}
             toggleTaskStatus={(taskId) => toggleTaskStatus(taskId)}
+            updateTaskTitle={(taskId, newTitle) => updateTaskTitle(taskId, newTitle)}
           />
         </div>
       </main>
