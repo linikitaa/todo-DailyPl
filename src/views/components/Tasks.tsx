@@ -6,9 +6,9 @@ import { EditableSpan } from "./EditableSpan.tsx";
 
 type Props = {
   filteredTasks: Task[];
-  removeTaskHandler: (taskId: number) => void;
-  toggleTaskStatus: (taskId: number) => void;
-  updateTaskTitle: (taskId: number, newTitle: string) => void;
+  removeTaskHandler: (taskId: string) => void;
+  toggleTaskStatus: (taskId: string) => void;
+  updateTaskTitle: (taskId: string, newTitle: string) => void;
 };
 export const Tasks = ({ filteredTasks, removeTaskHandler, toggleTaskStatus, updateTaskTitle }: Props) => {
   return (

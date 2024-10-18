@@ -10,10 +10,13 @@ import { Tasks } from "../components/Tasks.tsx";
 import { Sorted } from "../components/Sorted.tsx";
 
 import { ChangeEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "../../data/store.ts";
+import { addTask, changeStatusTask, removeTask } from "../components/slice.ts";
 
 export type Status = "all" | "active" | "completed";
 export type Task = {
-  id: number;
+  id: string;
   title: string;
   date: string;
   status: Status;
@@ -22,29 +25,23 @@ export type Task = {
 function App() {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
   const [selectedStatus, setSelectedStatus] = useState<Status>("all");
-  const [task, setTask] = useState<Task[]>([
-    { id: 1, status: "active", title: "cook", date: "12/12/2222" },
-    { id: 2, status: "active", title: "sport", date: "12/12/2222" },
-    { id: 3, status: "completed", title: "less", date: "12/12/2222" },
-  ]);
+
   let [title, setTitle] = useState("");
 
+  const tasks = useAppSelector<Task[]>((state) => state.tasks);
+  const dispatch: AppDispatch = useDispatch();
+
   const addTaskHandler = () => {
-    if (title.trim() !== "" && selectedDate) {
-      setTask([
-        ...task,
-        { id: task.length + 1, title: title, status: "active", date: selectedDate.format("DD/MM/YY") },
-      ]);
-      setTitle("");
-    }
+    dispatch(addTask({ title: title, date: selectedDate ? selectedDate.format("DD/MM/YY") : null }));
+    setTitle("");
   };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.currentTarget.value);
   };
 
-  const removeTaskHandler = (taskId: number) => {
-    setTask(task.filter((el) => el.id !== taskId));
+  const removeTaskHandler = (taskId: string) => {
+    dispatch(removeTask({ taskId }));
   };
 
   const onChangeDateHandler = (date: Dayjs | null) => {
@@ -55,17 +52,17 @@ function App() {
     setSelectedStatus(status);
   };
 
-  const filteredTasks = selectedStatus === "all" ? task : task.filter((t) => t.status === selectedStatus);
+  const filteredTasks = selectedStatus === "all" ? tasks : tasks.filter((t) => t.status === selectedStatus);
 
-  const toggleTaskStatus = (taskId: number) => {
-    setTask((prevTasks) =>
-      prevTasks.map((t) => (t.id === taskId ? { ...t, status: t.status === "active" ? "completed" : "active" } : t)),
-    );
+  const toggleTaskStatus = (taskId: string) => {
+    // setTask((prevTasks) =>
+    //   prevTasks.map((t) => (t.id === taskId ? { ...t, status: t.status === "active" ? "completed" : "active" } : t)),
+    // );
+    dispatch(changeStatusTask({ taskId }));
   };
 
-  const updateTaskTitle = (taskId: number, newTitle: string) => {
-    debugger;
-    setTask(task.map((el) => (el.id === taskId ? { ...el, title: newTitle } : el)));
+  const updateTaskTitle = (taskId: string, newTitle: string) => {
+    // setTask(task.map((el) => (el.id === taskId ? { ...el, title: newTitle } : el)));
   };
 
   return (
