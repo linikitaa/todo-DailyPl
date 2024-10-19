@@ -12,7 +12,7 @@ import { Sorted } from "../components/Sorted.tsx";
 import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "../../data/store.ts";
-import { addTask, changeStatusTask, removeTask } from "../components/slice.ts";
+import { addTask, changeStatus, removeTask, updateTitle } from "../components/slice.ts";
 
 export type Status = "all" | "active" | "completed";
 export type Task = {
@@ -25,21 +25,20 @@ export type Task = {
 function App() {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
   const [selectedStatus, setSelectedStatus] = useState<Status>("all");
-
-  let [title, setTitle] = useState("");
+  const [title, setTitle] = useState("");
 
   const tasks = useAppSelector<Task[]>((state) => state.tasks);
   const dispatch: AppDispatch = useDispatch();
 
+  const filteredTasks = selectedStatus === "all" ? tasks : tasks.filter((t) => t.status === selectedStatus);
+
   const addTaskHandler = () => {
-    dispatch(addTask({ title: title, date: selectedDate ? selectedDate.format("DD/MM/YY") : null }));
+    dispatch(addTask({ title: title, date: selectedDate }));
     setTitle("");
   };
-
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.currentTarget.value);
   };
-
   const removeTaskHandler = (taskId: string) => {
     dispatch(removeTask({ taskId }));
   };
@@ -52,17 +51,12 @@ function App() {
     setSelectedStatus(status);
   };
 
-  const filteredTasks = selectedStatus === "all" ? tasks : tasks.filter((t) => t.status === selectedStatus);
-
   const toggleTaskStatus = (taskId: string) => {
-    // setTask((prevTasks) =>
-    //   prevTasks.map((t) => (t.id === taskId ? { ...t, status: t.status === "active" ? "completed" : "active" } : t)),
-    // );
-    dispatch(changeStatusTask({ taskId }));
+    dispatch(changeStatus({ taskId }));
   };
 
   const updateTaskTitle = (taskId: string, newTitle: string) => {
-    // setTask(task.map((el) => (el.id === taskId ? { ...el, title: newTitle } : el)));
+    dispatch(updateTitle({ taskId, newTitle }));
   };
 
   return (
