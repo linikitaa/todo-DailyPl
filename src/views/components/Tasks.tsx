@@ -3,6 +3,7 @@ import Checkbox from "antd/lib/checkbox/Checkbox";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Task } from "../App";
 import { EditableSpan } from "./EditableSpan.tsx";
+import { Button, message, Popconfirm, PopconfirmProps } from "antd";
 
 type Props = {
   filteredTasks: Task[];
@@ -19,10 +20,30 @@ export const Tasks = ({ filteredTasks, removeTaskHandler, toggleTaskStatus, upda
             <Checkbox onChange={() => toggleTaskStatus(el.id)} checked={el.status === "completed"} />
             <EditableSpan value={el.title} onChange={(newTitle) => updateTaskTitle(el.id, newTitle)} />
             <span className={s.date}>{el.date}</span>
-            <CloseCircleOutlined
-              onClick={() => removeTaskHandler(el.id)}
-              style={{ color: "red", fontSize: "22px", cursor: "pointer" }}
-            />
+            <Popconfirm
+              title="Delete the task"
+              description="Are you sure to delete this task?"
+              onConfirm={() => {
+                removeTaskHandler(el.id);
+              }}
+              onCancel={() => {}}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button
+                style={{
+                  padding: "1px 5px",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginBottom: "3px",
+                  backgroundColor: "inherit",
+                  color: "#c70505",
+                  border: "1px solid #c70505",
+                  height: "25px",
+                }}
+                danger
+              ></Button>
+            </Popconfirm>
           </div>
         );
       })}
